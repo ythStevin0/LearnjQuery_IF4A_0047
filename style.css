@@ -37,3 +37,34 @@ h3 {
     color: #cbd5e1;
     font-weight: 500;
 }
+
+#formTodo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(30, 41, 59, 0.8);
+}
+
+input {
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    background: #f8fafc;
+    color: #0f172a;
+    font-size: 0.98rem;
+    outline: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+input:focus {
+    transform: translateY(-1px);
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.18);
+}
+
+input::placeholder {
+    color: #64748b;
+}
