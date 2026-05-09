@@ -4,6 +4,10 @@ const btnTambah = document.getElementById("btnTambahTodo");
 const daftarTugas = document.getElementById("listTugas");
 
 btnTambah.addEventListener("click", function() {
+if (inputValue.value === "" || inputDate.value === "") {
+        alert("Input tugas dan tanggal tidak boleh kosong!");
+        return;
+    }
 
     const listBaru = document.createElement("li");
 
