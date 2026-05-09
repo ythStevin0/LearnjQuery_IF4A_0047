@@ -169,4 +169,34 @@ li {
     cursor: pointer;
     font-weight: 600;
     transition: all 0.2s ease;
+
+.statusBadge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-right: 10px;
+}
+
+.progressStatus {
+    background: #f59e0b;
+    color: #fff;
+}
+
+.doneStatus {
+    background: #22c55e;
+    color: #fff;
+}
+
+.completed span {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
 }
