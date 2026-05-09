@@ -68,3 +68,35 @@ input:focus {
 input::placeholder {
     color: #64748b;
 }
+
+#inputTask {
+    flex: 2 1 260px;
+}
+
+#inputDate {
+    flex: 1 1 180px;
+}
+
+#btnTambahTodo,
+.btnEdit,
+.btnDelete {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 12px;
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+#btnTambahTodo {
+    flex: 0 0 auto;
+    background: linear-gradient(135deg, #22c55e, #15803d);
+}
+
+#btnTambahTodo:hover,
+.btnEdit:hover,
+.btnDelete:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+}
