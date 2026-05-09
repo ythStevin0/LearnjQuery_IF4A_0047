@@ -11,8 +11,14 @@ if (inputValue.value === "" || inputDate.value === "") {
 
     const listBaru = document.createElement("li");
 
+    // 1. Tambahkan Checkbox
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    listBaru.appendChild(checkbox);
+
     const teksTugas = document.createElement("div");
     teksTugas.style.flex = "1";
+    teksTugas.style.marginLeft = "10px";
 
     const spanTugas = document.createElement("span");
     spanTugas.innerHTML = inputValue.value;
@@ -25,6 +31,25 @@ if (inputValue.value === "" || inputDate.value === "") {
     teksTugas.appendChild(spanTugas);
     teksTugas.appendChild(spanTanggal);
     listBaru.appendChild(teksTugas);
+
+    // 2. Tambahkan Label Status
+    const labelStatus = document.createElement("span");
+    labelStatus.innerHTML = "Progress";
+    labelStatus.className = "statusBadge progressStatus";
+    listBaru.appendChild(labelStatus);
+
+    // 3. Logika Toggle Status
+    checkbox.addEventListener("change", function() {
+        if (this.checked) {
+            labelStatus.innerHTML = "Selesai";
+            labelStatus.className = "statusBadge doneStatus";
+            listBaru.classList.add("completed");
+        } else {
+            labelStatus.innerHTML = "Progress";
+            labelStatus.className = "statusBadge progressStatus";
+            listBaru.classList.remove("completed");
+        }
+    });
 
     const btnEdit = document.createElement("button");
     btnEdit.innerHTML = `<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>`;
