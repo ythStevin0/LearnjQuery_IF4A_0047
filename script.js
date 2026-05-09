@@ -12,12 +12,34 @@ if (inputValue.value === "" || inputDate.value === "") {
     const listBaru = document.createElement("li");
 
     const teksTugas = document.createElement("div");
-    teksTugas.innerHTML = `
-        <span>${inputValue.value}</span>
-        <small>${inputDate.value}</small>
-    `;
+    teksTugas.style.flex = "1";
 
+    const spanTugas = document.createElement("span");
+    spanTugas.innerHTML = inputValue.value;
+
+    const spanTanggal = document.createElement("small");
+    spanTanggal.innerHTML = ` (${inputDate.value})`;
+    spanTanggal.style.display = "block";
+    spanTanggal.style.color = "#cbd5e1";
+
+    teksTugas.appendChild(spanTugas);
+    teksTugas.appendChild(spanTanggal);
     listBaru.appendChild(teksTugas);
+
+    const btnEdit = document.createElement("button");
+    btnEdit.innerHTML = "Edit";
+    btnEdit.className = "btnEdit";
+
+    btnEdit.onclick = function() {
+        const tugasBaru = prompt("Edit Tugas:", spanTugas.innerHTML);
+        if (tugasBaru !== null && tugasBaru !== "") {
+            spanTugas.innerHTML = tugasBaru;
+            const tanggalBaru = prompt("Edit Tanggal (YYYY-MM-DD):", spanTanggal.innerHTML.replace(/[() ]/g, ""));
+            if (tanggalBaru !== null && tanggalBaru !== "") {
+                spanTanggal.innerHTML = ` (${tanggalBaru})`;
+            }
+        }
+    };
 
     const btnHapus = document.createElement("button");
     btnHapus.innerHTML = "Hapus";
@@ -29,6 +51,7 @@ if (inputValue.value === "" || inputDate.value === "") {
         }
     };
 
+    listBaru.appendChild(btnEdit);
     listBaru.appendChild(btnHapus);
     daftarTugas.appendChild(listBaru);
 

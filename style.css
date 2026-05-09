@@ -136,3 +136,19 @@ li {
     transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
+
+.btnEdit {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btnEdit:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
