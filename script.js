@@ -18,6 +18,18 @@ if (inputValue.value === "" || inputDate.value === "") {
     `;
 
     listBaru.appendChild(teksTugas);
+
+    const btnHapus = document.createElement("button");
+    btnHapus.innerHTML = "Hapus";
+    btnHapus.className = "btnDelete";
+    
+    btnHapus.onclick = function() {
+        if(confirm("Apakah Anda yakin ingin menghapus tugas ini?")) {
+            listBaru.remove();
+        }
+    };
+
+    listBaru.appendChild(btnHapus);
     daftarTugas.appendChild(listBaru);
 
     inputValue.value = "";
