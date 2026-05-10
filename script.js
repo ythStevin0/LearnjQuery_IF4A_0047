@@ -24,7 +24,7 @@ if (inputValue.value === "" || inputDate.value === "") {
     spanTugas.innerHTML = inputValue.value;
 
     const spanTanggal = document.createElement("small");
-    spanTanggal.innerHTML = ` (${inputDate.value})`;
+    spanTanggal.innerHTML = `Mulai: ${inputDate.value}`;
     spanTanggal.style.display = "block";
     spanTanggal.style.color = "#cbd5e1";
 
@@ -60,9 +60,9 @@ if (inputValue.value === "" || inputDate.value === "") {
         const tugasBaru = prompt("Edit Tugas:", spanTugas.innerHTML);
         if (tugasBaru !== null && tugasBaru !== "") {
             spanTugas.innerHTML = tugasBaru;
-            const tanggalBaru = prompt("Edit Tanggal (YYYY-MM-DD):", spanTanggal.innerHTML.replace(/[() ]/g, ""));
+            const tanggalBaru = prompt("Edit Tanggal (YYYY-MM-DD):", spanTanggal.innerHTML.replace("Mulai: ", ""));
             if (tanggalBaru !== null && tanggalBaru !== "") {
-                spanTanggal.innerHTML = ` (${tanggalBaru})`;
+                spanTanggal.innerHTML = `Mulai: ${tanggalBaru}`;
             }
         }
     };
