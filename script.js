@@ -111,3 +111,9 @@ btnTambah.addEventListener("click", function() {
     inputDate.value = "";
     inputValue.focus();
 });
+
+inputValue.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        btnTambah.click();
+    }
+});
