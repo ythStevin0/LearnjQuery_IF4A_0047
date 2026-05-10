@@ -96,11 +96,15 @@ function tambahElemenTugas(teks, tanggal, statusSelesai) {
 }
 
 btnTambah.addEventListener("click", function() {
-    if (inputValue.value === "" || inputDate.value === "") {
-        alert("Input tidak boleh kosong!");
+    const taskValue = inputValue.value.trim();
+    const dateValue = inputDate.value;
+
+    if (taskValue === "" || dateValue === "") {
+        alert("Nama tugas dan tanggal tidak boleh kosong atau hanya berisi spasi!");
         return;
     }
-    tambahElemenTugas(inputValue.value, inputDate.value, false);
+
+    tambahElemenTugas(taskValue, dateValue, false);
     saveData();
     
     inputValue.value = "";
