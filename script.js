@@ -1,119 +1,122 @@
-const inputValue = document.getElementById("inputTask");
-const inputDate = document.getElementById("inputDate");
-const btnTambah = document.getElementById("btnTambahTodo");
-const daftarTugas = document.getElementById("listTugas");
+$(document).ready(function() {
+    const $inputValue = $("#inputTask");
+    const $inputDate = $("#inputDate");
+    const $btnTambah = $("#btnTambahTodo");
+    const $daftarTugas = $("#listTugas");
 
-window.onload = function() {
+    // Load data from LocalStorage
     const data = localStorage.getItem("dataTugas");
     if (data) {
         JSON.parse(data).forEach(tugas => {
             tambahElemenTugas(tugas.teks, tugas.tanggal, tugas.selesai);
         });
     }
-};
 
-function saveData() {
-    const semuaTugas = [];
-    document.querySelectorAll("#listTugas li").forEach(li => {
-        semuaTugas.push({
-            teks: li.querySelector("span").innerHTML,
-            tanggal: li.querySelector("small").innerHTML.replace("Mulai: ", ""),
-            selesai: li.querySelector("input[type='checkbox']").checked
+    function saveData() {
+        const semuaTugas = [];
+        $("#listTugas li").each(function() {
+            const $li = $(this);
+            semuaTugas.push({
+                teks: $li.find("span").first().html(),
+                tanggal: $li.find("small").html().replace("Mulai: ", ""),
+                selesai: $li.find("input[type='checkbox']").is(":checked")
+            });
         });
-    });
-    localStorage.setItem("dataTugas", JSON.stringify(semuaTugas));
-}
+        localStorage.setItem("dataTugas", JSON.stringify(semuaTugas));
+    }
 
-function tambahElemenTugas(teks, tanggal, statusSelesai) {
-    const listBaru = document.createElement("li");
-    if (statusSelesai) listBaru.classList.add("completed");
+    function tambahElemenTugas(teks, tanggal, statusSelesai) {
+        const $listBaru = $("<li/>");
+        if (statusSelesai) $listBaru.addClass("completed");
 
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = statusSelesai;
-    listBaru.appendChild(checkbox);
+        const $checkbox = $("<input/>", {
+            type: "checkbox",
+            checked: statusSelesai
+        });
 
-    const teksTugas = document.createElement("div");
-    teksTugas.style.flex = "1";
-    teksTugas.style.marginLeft = "10px";
+        const $teksTugas = $("<div/>").css({
+            "flex": "1",
+            "margin-left": "10px"
+        });
 
-    const spanTugas = document.createElement("span");
-    spanTugas.innerHTML = teks;
+        const $spanTugas = $("<span/>").html(teks);
+        const $spanTanggal = $("<small/>")
+            .html(`Mulai: ${tanggal}`)
+            .css({
+                "display": "block",
+                "color": "#cbd5e1"
+            });
 
-    const spanTanggal = document.createElement("small");
-    spanTanggal.innerHTML = `Mulai: ${tanggal}`;
-    spanTanggal.style.display = "block";
-    spanTanggal.style.color = "#cbd5e1";
+        $teksTugas.append($spanTugas).append($spanTanggal);
 
-    teksTugas.appendChild(spanTugas);
-    teksTugas.appendChild(spanTanggal);
-    listBaru.appendChild(teksTugas);
+        const $labelStatus = $("<span/>")
+            .html(statusSelesai ? "Selesai" : "Progress")
+            .addClass("statusBadge")
+            .addClass(statusSelesai ? "doneStatus" : "progressStatus");
 
-    const labelStatus = document.createElement("span");
-    labelStatus.innerHTML = statusSelesai ? "Selesai" : "Progress";
-    labelStatus.className = statusSelesai ? "statusBadge doneStatus" : "statusBadge progressStatus";
-    listBaru.appendChild(labelStatus);
+        $checkbox.on("change", function() {
+            if ($(this).is(":checked")) {
+                $labelStatus.html("Selesai").removeClass("progressStatus").addClass("doneStatus");
+                $listBaru.addClass("completed");
+            } else {
+                $labelStatus.html("Progress").removeClass("doneStatus").addClass("progressStatus");
+                $listBaru.removeClass("completed");
+            }
+            saveData();
+        });
 
-    checkbox.addEventListener("change", function() {
-        if (this.checked) {
-            labelStatus.innerHTML = "Selesai";
-            labelStatus.className = "statusBadge doneStatus";
-            listBaru.classList.add("completed");
-        } else {
-            labelStatus.innerHTML = "Progress";
-            labelStatus.className = "statusBadge progressStatus";
-            listBaru.classList.remove("completed");
+        const $btnEdit = $("<button/>")
+            .html(`<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>`)
+            .addClass("btnEdit")
+            .on("click", function() {
+                const tBaru = prompt("Edit Tugas:", $spanTugas.html());
+                if (tBaru) {
+                    $spanTugas.html(tBaru);
+                    const dBaru = prompt("Edit Tanggal (YYYY-MM-DD):", $spanTanggal.html().replace("Mulai: ", ""));
+                    if (dBaru) $spanTanggal.html(`Mulai: ${dBaru}`);
+                    saveData();
+                }
+            });
+
+        const $btnHapus = $("<button/>")
+            .html(`<svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>`)
+            .addClass("btnDelete")
+            .on("click", function() {
+                if (confirm("Hapus tugas ini?")) {
+                    $listBaru.remove();
+                    saveData();
+                }
+            });
+
+        $listBaru.append($checkbox)
+                 .append($teksTugas)
+                 .append($labelStatus)
+                 .append($btnEdit)
+                 .append($btnHapus);
+
+        $daftarTugas.append($listBaru);
+    }
+
+    $btnTambah.on("click", function() {
+        const taskValue = $inputValue.val().trim();
+        const dateValue = $inputDate.val();
+
+        if (taskValue === "" || dateValue === "") {
+            alert("Nama tugas dan tanggal tidak boleh kosong atau hanya berisi spasi!");
+            return;
         }
+
+        tambahElemenTugas(taskValue, dateValue, false);
         saveData();
+        
+        $inputValue.val("");
+        $inputDate.val("");
+        $inputValue.focus();
     });
 
-    const btnEdit = document.createElement("button");
-    btnEdit.innerHTML = `<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>`;
-    btnEdit.className = "btnEdit";
-    btnEdit.onclick = function() {
-        const tBaru = prompt("Edit Tugas:", spanTugas.innerHTML);
-        if (tBaru) {
-            spanTugas.innerHTML = tBaru;
-            const dBaru = prompt("Edit Tanggal (YYYY-MM-DD):", spanTanggal.innerHTML.replace("Mulai: ", ""));
-            if (dBaru) spanTanggal.innerHTML = `Mulai: ${dBaru}`;
-            saveData();
+    $inputValue.on("keypress", function(event) {
+        if (event.key === "Enter") {
+            $btnTambah.click();
         }
-    };
-
-    const btnHapus = document.createElement("button");
-    btnHapus.innerHTML = `<svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>`;
-    btnHapus.className = "btnDelete";
-    btnHapus.onclick = function() {
-        if (confirm("Hapus tugas ini?")) {
-            listBaru.remove();
-            saveData();
-        }
-    };
-
-    listBaru.appendChild(btnEdit);
-    listBaru.appendChild(btnHapus);
-    daftarTugas.appendChild(listBaru);
-}
-
-btnTambah.addEventListener("click", function() {
-    const taskValue = inputValue.value.trim();
-    const dateValue = inputDate.value;
-
-    if (taskValue === "" || dateValue === "") {
-        alert("Nama tugas dan tanggal tidak boleh kosong atau hanya berisi spasi!");
-        return;
-    }
-
-    tambahElemenTugas(taskValue, dateValue, false);
-    saveData();
-    
-    inputValue.value = "";
-    inputDate.value = "";
-    inputValue.focus();
-});
-
-inputValue.addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        btnTambah.click();
-    }
+    });
 });
